@@ -10,7 +10,7 @@ const account1 = {
 };
   
 const account2 = {
-    owner: 'Luss Huguette',
+    owner: 'Luss Huguette Chanelle',
     movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
     interestRate: 1.5,
     pin: 2222,
@@ -78,3 +78,22 @@ const displayMovements = function(movements)
 };
 
 displayMovements(account1.movements);
+
+const user ='Luss Huguette Chanelle';
+const username = function(user)
+{
+    const name = user.toLowerCase().split(' ').map(nm=>nm[0]).join('');
+    return name;
+}
+console.log(username(user));
+
+const createUsername = function(accs)
+{
+    accs.forEach(function (acc)
+    {
+        acc.username = acc.owner.toLowerCase().split(' ').map(nm=>nm[0]).join('');
+    });
+};
+
+createUsername(accounts);
+console.log(accounts);
