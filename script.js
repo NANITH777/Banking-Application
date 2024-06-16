@@ -100,13 +100,13 @@ const calcDisplaySummary = function(movements)
 }
 calcDisplaySummary(account1.movements);
 
-const user ='Luss Huguette Chanelle';
+/*const user ='Luss Huguette Chanelle';
 const username = function(user)
 {
     const name = user.toLowerCase().split(' ').map(nm=>nm[0]).join('');
     return name;
 }
-console.log(username(user));
+console.log(username(user));*/
 
 const createUsername = function(accs)
 {
@@ -117,4 +117,25 @@ const createUsername = function(accs)
 };
 
 createUsername(accounts);
-console.log(accounts);
+
+let currentAccount;
+btnLogin.addEventListener('click', function(e)
+{
+    e.preventDefault();
+
+    currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
+    console.log(currentAccount);
+
+    if(currentAccount?.pin === Number(inputLoginPin.value))
+    {
+        // Display UI and Message
+        labelWelcome.textContent = `Welcome ${currentAccount.owner.split(' ')[0]}`;
+        containerApp.style.opacity = 100;
+
+        // Display movements
+
+        // Display Balance
+
+        //Displau Summary
+    }
+});
