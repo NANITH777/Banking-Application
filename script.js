@@ -77,15 +77,12 @@ const displayMovements = function(movements)
     
 };
 
-displayMovements(account1.movements);
-
 const CalcDisplayBalance = function(movements)
 {
     const balance = movements.reduce((acc, mov) => acc + mov , 0);
     labelBalance.textContent= `${balance} $`;
 }
 
-CalcDisplayBalance(account1.movements);
 
 const calcDisplaySummary = function(movements)
 {
@@ -96,9 +93,9 @@ const calcDisplaySummary = function(movements)
     labelSumOut.textContent=`${out}$`;
 
     const interest = movements.filter(mov => mov>0).map(deposit => deposit * 1.2/100).reduce((acc, inter) => acc + inter, 0);
-    labelSumInterest.textContent=`${interest}$`;
+    labelSumInterest.textContent=`${Math.abs(interest)}$`;
 }
-calcDisplaySummary(account1.movements);
+
 
 /*const user ='Luss Huguette Chanelle';
 const username = function(user)
@@ -133,9 +130,12 @@ btnLogin.addEventListener('click', function(e)
         containerApp.style.opacity = 100;
 
         // Display movements
+        displayMovements(currentAccount.movements);
 
         // Display Balance
+        CalcDisplayBalance(currentAccount.movements);
 
-        //Displau Summary
+        //Display Summary
+        calcDisplaySummary(currentAccount.movements);
     }
 });
