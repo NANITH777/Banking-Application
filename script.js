@@ -167,7 +167,7 @@ const createUsername = function(accs)
 
 createUsername(accounts);
 
-let currentAccount;
+let currentAccount, timer;
 
 btnLogin.addEventListener('click', function(e)
 {
@@ -199,8 +199,12 @@ btnLogin.addEventListener('click', function(e)
         ).format(now);
 
         // Clear Input fields
-        inputLoginUsername.value = inputLoginPin.value = ' ';
+        inputLoginUsername.value = inputLoginPin.value = '';
         inputLoginPin.blur();
+
+        // Timer
+        if (timer) clearInterval(timer);
+        timer = startLogOutTimer();
 
         updateUI(currentAccount);
     }
@@ -226,11 +230,15 @@ btnTransfer.addEventListener('click', function(e)
         receiveaccount.movementsDates.push(new Date().toISOString());
 
         // Clear Transfer Input fields
-        inputTransferTo.value = inputTransferAmount.value = ' ';
+        inputTransferTo.value = inputTransferAmount.value = '';
         inputTransferAmount.blur();
 
         // Update UI
         updateUI(currentAccount);
+
+        // Reset timer
+        clearInterval(timer);
+        timer = startLogOutTimer();
     }
 
 });
@@ -270,6 +278,10 @@ btnLoan.addEventListener('click', function(e)
     };
 
     inputLoanAmount.value='';
+
+    // Reset timer
+    clearInterval(timer);
+    timer = startLogOutTimer();
 });
 
 let sorted = false;
@@ -278,4 +290,36 @@ btnSort.addEventListener('click', function(e)
     e.preventDefault();
     displayMovements(currentAccount, !sorted);
     sorted = !sorted;
-})
+});
+
+const startLogOutTimer = function () 
+{
+    const tick = function () 
+    {
+      const min = String(Math.trunc(time / 60)).padStart(2, 0);
+      const sec = String(time % 60).padStart(2, 0);
+  
+      // In each call, print the remaining time to UI
+      labelTimer.textContent = `${min}:${sec}`;
+  
+      // When 0 seconds, stop timer and log out user
+      if(time === 0)
+        {
+            clearInterval(timer);
+            labelWelcome.textContent = "Log in to get started";
+            containerApp.style.opacity = 0;
+        };
+        
+      // Decrease 1s
+      time--;
+    };
+  
+    // Set time to 3 minutes
+    let time = 180;
+  
+    // Call the timer every second
+    tick();
+    const timer = setInterval(tick, 1000);
+  
+    return timer;
+};
