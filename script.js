@@ -159,11 +159,6 @@ const createUsername = function(accs)
 createUsername(accounts);
 
 let currentAccount;
-// FAKE ALWAYS LOGGED
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
-
 
 btnLogin.addEventListener('click', function(e)
 {
