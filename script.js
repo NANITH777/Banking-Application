@@ -91,6 +91,14 @@ const formatMovementDate = function(date, locale)
     }
 };
 
+const formatCur = function (value, locale, currency) 
+{
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currency,
+    }).format(value);
+};
+
 const displayMovements = function(account, sort = false)
 {
     containerMovements.innerHTML='';
@@ -103,13 +111,14 @@ const displayMovements = function(account, sort = false)
 
         const date = new Date(account.movementsDates[i]);
         const displayDate = formatMovementDate(date, account.locale);
+        const formattedMov = formatCur(mov, account.locale, account.currency);
         
 
         const html = `
         <div class="movements__row">
             <div class="movements__type movements__type--${type}">${i +1} ${type}</div>
             <div class="movements__date">${displayDate}</div>
-            <div class="movements__value">${mov}$</div>
+            <div class="movements__value">${formattedMov}</div>
         </div>`;
 
         containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -120,20 +129,20 @@ const displayMovements = function(account, sort = false)
 const CalcDisplayBalance = function(account)
 {
     account.balance = account.movements.reduce((acc, mov) => acc + mov , 0);
-    labelBalance.textContent= `${account.balance} $`;
+    labelBalance.textContent = formatCur(account.balance, account.locale, account.currency);
 }
 
 
 const calcDisplaySummary = function(account)
 {
     const incomes= account.movements.filter(mov => mov>0).reduce((acc, mov) => acc + mov, 0);
-    labelSumIn.textContent=`${incomes}$`;
-    
+    labelSumIn.textContent= formatCur(incomes, account.locale, account.currency);
+
     const out = account.movements.filter(mov => mov < 0).reduce((acc, mov) => acc+ mov, 0);
-    labelSumOut.textContent=`${out}$`;
+    labelSumOut.textContent= formatCur(Math.abs(out), account.locale, account.currency);
 
     const interest = account.movements.filter(mov => mov>0).map(deposit => deposit * account.interestRate/100).reduce((acc, inter) => acc + inter, 0);
-    labelSumInterest.textContent=`${Math.abs(interest)}$`;
+    labelSumInterest.textContent=formatCur(interest, account.locale, account.currency);
 }
 
 const updateUI = function(account)
