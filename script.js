@@ -77,10 +77,10 @@ const displayMovements = function(movements)
     
 };
 
-const CalcDisplayBalance = function(movements)
+const CalcDisplayBalance = function(account)
 {
-    const balance = movements.reduce((acc, mov) => acc + mov , 0);
-    labelBalance.textContent= `${balance} $`;
+    account.balance = account.movements.reduce((acc, mov) => acc + mov , 0);
+    labelBalance.textContent= `${account.balance} $`;
 }
 
 
@@ -94,6 +94,18 @@ const calcDisplaySummary = function(account)
 
     const interest = account.movements.filter(mov => mov>0).map(deposit => deposit * account.interestRate/100).reduce((acc, inter) => acc + inter, 0);
     labelSumInterest.textContent=`${Math.abs(interest)}$`;
+}
+
+const updateUI = function(account)
+{
+    // Display movements
+    displayMovements(account.movements);
+
+    // Display Balance
+    CalcDisplayBalance(account);
+
+    //Display Summary
+    calcDisplaySummary(account);
 }
 
 
@@ -133,13 +145,31 @@ btnLogin.addEventListener('click', function(e)
         inputLoginUsername.value = inputLoginPin.value = ' ';
         inputLoginPin.blur();
 
-        // Display movements
-        displayMovements(currentAccount.movements);
-
-        // Display Balance
-        CalcDisplayBalance(currentAccount.movements);
-
-        //Display Summary
-        calcDisplaySummary(currentAccount);
+        updateUI(currentAccount);
     }
 });
+
+btnTransfer.addEventListener('click', function(e)
+{
+    e.preventDefault();
+
+    const amount = Number(inputTransferAmount.value);
+    const receiveaccount = accounts.find(acc => acc.username === inputTransferTo.value);
+    console.log(amount, receiveaccount);
+
+    if(amount > 0 && receiveaccount && receiveaccount.username !== currentAccount.username &&
+         currentAccount.balance >= amount)
+    {
+        // Doing the tranfer
+        currentAccount.movements.push(-amount);
+        receiveaccount.movements.push(amount);
+
+        // Clear Transfer Input fields
+        inputTransferTo.value = inputTransferAmount.value = ' ';
+        inputTransferAmount.blur();
+
+        // Update UI
+        updateUI(currentAccount);
+    }
+
+})
