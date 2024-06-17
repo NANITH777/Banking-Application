@@ -172,4 +172,24 @@ btnTransfer.addEventListener('click', function(e)
         updateUI(currentAccount);
     }
 
+});
+
+btnClose.addEventListener('click', function(e)
+{
+    e.preventDefault();
+
+    if(currentAccount.username === inputCloseUsername.value && currentAccount.pin ===Number(inputClosePin.value))
+    {
+        const index = accounts.findIndex(account => account.username === currentAccount.username);
+        console.log(index);
+
+        // Delete account
+        accounts.splice(index, 1);
+
+        // Hide UI
+        containerApp.style.opacity = 0; 
+        labelWelcome.textContent = 'Log in to get started';
+        console.log('Account Deleted');
+    }
+
 })
