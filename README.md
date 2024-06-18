@@ -38,7 +38,7 @@ The Banking Application is a web-based application that allows users to manage t
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/username/banking-app.git
+   git clone https://github.com/NANITH777/Banking-Application.git
    ```
 
 2. **Navigate to the directory**:
